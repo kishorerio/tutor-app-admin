@@ -12,6 +12,7 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
+  Cell,
 } from "recharts";
 import theme from "../../theme/theme";
 
@@ -106,9 +107,15 @@ const Chart = ({
               <Bar
                 key={key}
                 dataKey={key}
-                fill={colors[index] || theme.colors.primary}
                 radius={[4, 4, 0, 0]}
-              />
+              >
+                {data.map((entry, entryIndex) => (
+                  <Cell 
+                    key={`cell-${entryIndex}`} 
+                    fill={entry.color || colors[index] || theme.colors.primary} 
+                  />
+                ))}
+              </Bar>
             ))}
           </BarChart>
         );

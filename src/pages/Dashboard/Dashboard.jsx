@@ -15,15 +15,16 @@ const Dashboard = () => {
   // Sample analytics data
   const analyticsData = {
     totalUsers: 1250,
+    activeUsers: 1050,
+    inactiveUsers: 200,
     totalTutors: 85,
     activeTutors: 72,
+    inactiveTutors: 13,
     totalSessions: 3420,
-    revenue: 125000,
     growth: {
       users: 12.5,
       tutors: 8.3,
-      sessions: 15.7,
-      revenue: 22.1
+      sessions: 15.7
     },
     chartData: {
       userRegistrations: [
@@ -43,13 +44,13 @@ const Dashboard = () => {
         { day: 'Sat', sessions: 38 },
         { day: 'Sun', sessions: 42 }
       ],
-      revenueData: [
-        { month: 'Jan', revenue: 15000 },
-        { month: 'Feb', revenue: 18000 },
-        { month: 'Mar', revenue: 22000 },
-        { month: 'Apr', revenue: 25000 },
-        { month: 'May', revenue: 28000 },
-        { month: 'Jun', revenue: 32000 }
+      userStatusData: [
+        { name: 'Active Users', value: 1050, color: '#10B981' },
+        { name: 'Inactive Users', value: 200, color: '#EF4444' }
+      ],
+      tutorStatusData: [
+        { name: 'Active Tutors', value: 72, color: '#10B981' },
+        { name: 'Inactive Tutors', value: 13, color: '#EF4444' }
       ]
     }
   };
@@ -144,9 +145,16 @@ const Dashboard = () => {
           <StatsContent>
             <StatsNumber>{filteredData.totalUsers.toLocaleString()}</StatsNumber>
             <StatsLabel>Total Users</StatsLabel>
-            <StatsGrowth positive={filteredData.growth.users > 0}>
-              +{filteredData.growth.users}% from last month
-            </StatsGrowth>
+            <StatsBreakdown>
+              <BreakdownItem>
+                <BreakdownDot color="#10B981" />
+                <BreakdownText>Active: {filteredData.activeUsers}</BreakdownText>
+              </BreakdownItem>
+              <BreakdownItem>
+                <BreakdownDot color="#EF4444" />
+                <BreakdownText>Inactive: {filteredData.inactiveUsers}</BreakdownText>
+              </BreakdownItem>
+            </StatsBreakdown>
           </StatsContent>
         </StatsCard>
 
@@ -157,9 +165,16 @@ const Dashboard = () => {
           <StatsContent>
             <StatsNumber>{filteredData.totalTutors}</StatsNumber>
             <StatsLabel>Total Tutors</StatsLabel>
-            <StatsGrowth positive={filteredData.growth.tutors > 0}>
-              +{filteredData.growth.tutors}% from last month
-            </StatsGrowth>
+            <StatsBreakdown>
+              <BreakdownItem>
+                <BreakdownDot color="#10B981" />
+                <BreakdownText>Active: {filteredData.activeTutors}</BreakdownText>
+              </BreakdownItem>
+              <BreakdownItem>
+                <BreakdownDot color="#EF4444" />
+                <BreakdownText>Inactive: {filteredData.inactiveTutors}</BreakdownText>
+              </BreakdownItem>
+            </StatsBreakdown>
           </StatsContent>
         </StatsCard>
 
@@ -172,19 +187,6 @@ const Dashboard = () => {
             <StatsLabel>Total Sessions</StatsLabel>
             <StatsGrowth positive={filteredData.growth.sessions > 0}>
               +{filteredData.growth.sessions}% from last month
-            </StatsGrowth>
-          </StatsContent>
-        </StatsCard>
-
-        <StatsCard>
-          <StatsIcon>
-            <img src="/src/assets/images/Dashboard Images/money-bag_svgrepo.com.svg" alt="Revenue" />
-          </StatsIcon>
-          <StatsContent>
-            <StatsNumber>${filteredData.revenue.toLocaleString()}</StatsNumber>
-            <StatsLabel>Total Revenue</StatsLabel>
-            <StatsGrowth positive={filteredData.growth.revenue > 0}>
-              +{filteredData.growth.revenue}% from last month
             </StatsGrowth>
           </StatsContent>
         </StatsCard>
@@ -226,43 +228,36 @@ const Dashboard = () => {
 
         <ChartCard>
           <ChartHeader>
-            <ChartTitle>Revenue Growth</ChartTitle>
-            <ChartSubtitle>Monthly revenue trends</ChartSubtitle>
+            <ChartTitle>User Status Distribution</ChartTitle>
+            <ChartSubtitle>Active vs Inactive users</ChartSubtitle>
           </ChartHeader>
           <ChartContainer>
             <Chart 
-              data={filteredData.chartData.revenueData}
-              type="area"
-              xKey="month"
-              yKeys={['revenue']}
-              colors={['#F59E0B']}
+              data={filteredData.chartData.userStatusData}
+              type="bar"
+              xKey="name"
+              yKeys={['value']}
+              colors={['#10B981', '#EF4444']}
+            />
+          </ChartContainer>
+        </ChartCard>
+
+        <ChartCard>
+          <ChartHeader>
+            <ChartTitle>Tutor Status Distribution</ChartTitle>
+            <ChartSubtitle>Active vs Inactive tutors</ChartSubtitle>
+          </ChartHeader>
+          <ChartContainer>
+            <Chart 
+              data={filteredData.chartData.tutorStatusData}
+              type="bar"
+              xKey="name"
+              yKeys={['value']}
+              colors={['#10B981', '#EF4444']}
             />
           </ChartContainer>
         </ChartCard>
       </ChartsGrid>
-
-      {/* Quick Stats */}
-      <QuickStatsSection>
-        <QuickStatsTitle>Quick Statistics</QuickStatsTitle>
-        <QuickStatsGrid>
-          <QuickStatItem>
-            <QuickStatLabel>Active Tutors</QuickStatLabel>
-            <QuickStatValue>{filteredData.activeTutors}/{filteredData.totalTutors}</QuickStatValue>
-          </QuickStatItem>
-          <QuickStatItem>
-            <QuickStatLabel>Avg Sessions/Day</QuickStatLabel>
-            <QuickStatValue>{Math.round(filteredData.totalSessions / 30)}</QuickStatValue>
-          </QuickStatItem>
-          <QuickStatItem>
-            <QuickStatLabel>Success Rate</QuickStatLabel>
-            <QuickStatValue>94.5%</QuickStatValue>
-          </QuickStatItem>
-          <QuickStatItem>
-            <QuickStatLabel>User Satisfaction</QuickStatLabel>
-            <QuickStatValue>4.8/5</QuickStatValue>
-          </QuickStatItem>
-        </QuickStatsGrid>
-      </QuickStatsSection>
     </Container>
   );
 };
@@ -397,6 +392,33 @@ const StatsGrowth = styled.div`
   font-family: 'Inter', sans-serif;
 `;
 
+const StatsBreakdown = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+`;
+
+const BreakdownItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+const BreakdownDot = styled.div`
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: ${props => props.color};
+`;
+
+const BreakdownText = styled.span`
+  font-size: 0.75rem;
+  color: ${theme.colors.secondaryTextColor};
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+`;
+
 const ChartsGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
@@ -433,48 +455,6 @@ const ChartSubtitle = styled.p`
 const ChartContainer = styled.div`
   height: 300px;
   width: 100%;
-`;
-
-const QuickStatsSection = styled.div`
-  background-color: ${theme.colors.white};
-  border-radius: 0.75rem;
-  padding: 1.5rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-`;
-
-const QuickStatsTitle = styled.h3`
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: ${theme.colors.textColor};
-  margin-bottom: 1rem;
-  font-family: 'Inter', sans-serif;
-`;
-
-const QuickStatsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-`;
-
-const QuickStatItem = styled.div`
-  text-align: center;
-  padding: 1rem;
-  border-radius: 0.5rem;
-  background-color: ${theme.colors.secondaryWhite};
-`;
-
-const QuickStatLabel = styled.div`
-  font-size: 0.875rem;
-  color: ${theme.colors.secondaryTextColor};
-  font-family: 'Inter', sans-serif;
-  margin-bottom: 0.5rem;
-`;
-
-const QuickStatValue = styled.div`
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: ${theme.colors.textColor};
-  font-family: 'Inter', sans-serif;
 `;
 
 export default Dashboard;

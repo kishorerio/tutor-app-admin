@@ -6,7 +6,7 @@ import GroupIcon from "../assets/images/Dashboard Images/group_svgrepo.com.svg";
 // import TimeIcon from "../assets/images/Dashboard Images/calendar_svgrepo.com.svg";
 // import MoneyIcon from "../assets/images/Dashboard Images/money-bag_svgrepo.com.svg";
 // import MessageIcon from "../assets/images/Dashboard Images/message-text-1_svgrepo.com.svg";
-import SettingsIcon from "../assets/images/Dashboard Images/settings_svgrepo.com.svg";
+// import SettingsIcon from "../assets/images/Dashboard Images/settings_svgrepo.com.svg";
 
 const SidebarItems = [
   {
@@ -29,13 +29,6 @@ const SidebarItems = [
         path: "/admin/tutors-manage",
       },
     ],
-  },
-  {
-    name: "Logout",
-    path: "/logout",
-    icon: SettingsIcon,
-    iconDark: SettingsIcon,
-    isLogout: true,
   },
 ];
 

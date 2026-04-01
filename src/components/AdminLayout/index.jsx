@@ -5,12 +5,14 @@ import { MdMenu, MdKeyboardArrowUp, MdKeyboardArrowDown } from "react-icons/md";
 import theme from "../../theme/theme";
 import SidebarItems from "../SidebarItem";
 import { getStoredAuthUser } from "../../helpers/auth_helper";
+import LogoutIcon from "../../assets/images/Dashboard Images/logout.svg";
 // import MainLogo from "../../assets/images/Dashboard Images/main_logo.svg";
 
 const AdminLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [user, setUser] = useState(null);
   const [expandedMenu, setExpandedMenu] = useState({});
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -26,6 +28,12 @@ const AdminLayout = () => {
       ...prev,
       [name]: !isExpanded,
     }));
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('authUser');
+    navigate('/login');
+    setShowLogoutModal(false);
   };
 
   const getPageTitle = () => {
@@ -77,12 +85,6 @@ const AdminLayout = () => {
                   onClick={() => {
                     if (hasSubmenu) {
                       toggleSubmenu(item.name, isExpanded);
-                    } else if (item.isLogout) {
-                      // Handle logout
-                      if (window.confirm('Are you sure you want to logout?')) {
-                        localStorage.removeItem('authUser');
-                        navigate('/login');
-                      }
                     } else {
                       navigate(item.path);
                     }
@@ -128,6 +130,14 @@ const AdminLayout = () => {
             );
           })}
         </SidebarNav>
+        
+        {/* Logout Button */}
+        <LogoutSection>
+          <LogoutButton onClick={() => setShowLogoutModal(true)} open={sidebarOpen}>
+            <img src={LogoutIcon} alt="Logout" />
+            {sidebarOpen && <span>Logout</span>}
+          </LogoutButton>
+        </LogoutSection>
       </Sidebar>
       <MainContent open={sidebarOpen}>
         <Header>
@@ -152,6 +162,34 @@ const AdminLayout = () => {
           <Outlet />
         </Content>
       </MainContent>
+
+      {/* Logout Confirmation Modal */}
+      {showLogoutModal && (
+        <LogoutModal>
+          <LogoutModalContent>
+            <LogoutModalHeader>
+              <LogoutModalTitle>Confirm Logout</LogoutModalTitle>
+            </LogoutModalHeader>
+            <LogoutModalBody>
+              <p>Are you sure you want to logout? You will be redirected to the login page.</p>
+            </LogoutModalBody>
+            <LogoutModalFooter>
+              <LogoutModalButton 
+                onClick={() => setShowLogoutModal(false)}
+                variant="cancel"
+              >
+                Cancel
+              </LogoutModalButton>
+              <LogoutModalButton 
+                onClick={handleLogout}
+                variant="confirm"
+              >
+                Logout
+              </LogoutModalButton>
+            </LogoutModalFooter>
+          </LogoutModalContent>
+        </LogoutModal>
+      )}
     </LayoutContainer>
   );
 };
@@ -399,6 +437,112 @@ const Role = styled.p`
   line-height: 160%;
   color: ${theme.colors.secondaryTextColor};
   margin: 0 0 0 0;
+`;
+
+const LogoutSection = styled.div`
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid ${theme.colors.border};
+`;
+
+const LogoutButton = styled.button`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.75rem 0.938rem;
+  border: none;
+  border-radius: 4px;
+  background-color: transparent;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: #dc2626;
+
+  img {
+    width: 1.5rem;
+    height: 1.5rem;
+    filter: brightness(0) saturate(100%) invert(17%) sepia(83%) saturate(5074%) hue-rotate(356deg) brightness(95%) contrast(95%);
+  }
+
+  span {
+    display: ${props => props.open ? 'inline' : 'none'};
+  }
+
+  &:hover {
+    background-color: #fee2e2;
+  }
+`;
+
+const LogoutModal = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+`;
+
+const LogoutModalContent = styled.div`
+  background-color: ${theme.colors.white};
+  border-radius: 0.75rem;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+`;
+
+const LogoutModalHeader = styled.div`
+  padding: 1.5rem 1.5rem 0 1.5rem;
+`;
+
+const LogoutModalTitle = styled.h3`
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: ${theme.colors.textColor};
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+`;
+
+const LogoutModalBody = styled.div`
+  padding: 1rem 1.5rem;
+
+  p {
+    color: ${theme.colors.secondaryTextColor};
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    line-height: 1.5;
+  }
+`;
+
+const LogoutModalFooter = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 0 1.5rem 1.5rem 1.5rem;
+`;
+
+const LogoutModalButton = styled.button`
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: ${props => props.variant === 'cancel' ? `1px solid ${theme.colors.border}` : 'none'};
+  background-color: ${props => props.variant === 'cancel' ? theme.colors.white : '#dc2626'};
+  color: ${props => props.variant === 'cancel' ? theme.colors.textColor : theme.colors.white};
+
+  &:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
 `;
 
 export default AdminLayout;
