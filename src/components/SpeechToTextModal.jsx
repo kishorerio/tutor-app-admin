@@ -3,8 +3,8 @@ import styled from "styled-components";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
-import OkIcon from "../assets/images/Customer/ok.svg";
-import CancelIcon from "../assets/images/Customer/cancel.svg";
+import OkIcon from "../assets/images/Team/greenTik.svg";
+import CancelIcon from "../assets/images/employee/Cross.svg";
 
 const SpeechToTextModal = ({ isOpen, onClose, onTranscript }) => {
   const { transcript, resetTranscript } = useSpeechRecognition();

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import theme from "../theme/theme";
-import CrossIcon from "../assets/images/Dashboard Images/crosssymbol.svg";
+import CrossIcon from "../assets/images/employee/Cross.svg";
 import { priceListConfig } from "../data/PriceList.js";
 
 const PriceListCard = ({ open, onClose }) => {
