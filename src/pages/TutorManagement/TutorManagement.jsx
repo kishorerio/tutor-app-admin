@@ -15,6 +15,7 @@ const TutorManagement = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedTutor, setSelectedTutor] = useState(null);
   const [showViewModal, setShowViewModal] = useState(false);
+
   const [formData, setFormData] = useState({
     fullName: '',
     contactNumber: '',
@@ -31,7 +32,7 @@ const TutorManagement = () => {
   const sampleTutors = [
     {
       id: 1,
-      fullName: 'Dr. Alice Johnson',
+      fullName: 'Dr. Alice Jhonson',
       contactNumber: '+1-555-0123',
       emailAddress: 'alice.johnson@example.com',
       pinCode: '12345',
